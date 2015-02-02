@@ -5,9 +5,20 @@
  */
 ;(function() { "use strict";
 
-    var $firebug = $('mqq_firebug_logs');
-    // dependent mqq.js
-    if (!$firebug) return;
+    // 检查开启模式
+    if ( location.hash !== '#mqq-firebug' ) return;
+
+    var NEWPRO = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_1_2 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) Mobile/11D257 QQ/5.3.2.424 NetType/WIFI Mem/46';
+    var OLDPRO = 'Mozilla/5.0 (Linux; Android 5.0.1; Nexus 4 Build/LRX22C) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile Safari/537.36 V1_AND_SQ_4.7.0_216_HDBM_T QQ/4.7.0.2385 NetType/WIFI'
+
+    // 创建input用于与chrome那边通信
+    var $firebug = document.createElement('input');
+    var $body = document.body || document.documentElement;
+    
+    $firebug.id = 'mqq_firebug_logs';
+    $firebug.type = 'hidden';
+    $firebug.value = NEWPRO;
+    $body.appendChild($firebug);
 
     function $(id) {
         return document.getElementById(id) || false;
@@ -84,15 +95,8 @@
             \n    width: auto;\
             \n    padding: 0 8px;\
             \n}';
-        document.getElementsByTagName("head")[0].appendChild(style);
 
-
-        // 自定义通信事件
-        var mqqEvent = document.createEvent('Event');
-        mqqEvent.initEvent('chrome2mqq', true, true);
-        // 通知MQQ开启调试模式
-        $firebug.value = 'true';
-        $firebug.dispatchEvent(mqqEvent);
+        $body.appendChild(style);
 
         var $logPanel = createElement("div", "mqq-debug-panel");
         var $scroller = createElement("div", "mqq-debug-scroller");
@@ -105,7 +109,7 @@
         $logPanel.appendChild($clear);
         $logPanel.appendChild($watch);
 
-        document.body.appendChild($logPanel);
+        $body.appendChild($logPanel);
 
         // addEventListener
         var starY, currHeight;

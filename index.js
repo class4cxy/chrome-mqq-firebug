@@ -3,17 +3,16 @@
 	var hasInitialize = [];
 
 	// 开启
-	chrome.browserAction.onClicked.addListener(function (tab) {
+	/*chrome.browserAction.onClicked.addListener(function (tab) {
 		if ( hasInitialize.indexOf(tab.id) === -1 ) {
-			chrome.browserAction.setIcon({path:"icon-on.png"});
-			chrome.tabs.executeScript(null, {file: "debug.js"});
-
+			// record
 			hasInitialize.push(tab.id);
+			chrome.tabs.reload();
 		}
-	});
+	});*/
 
 	// 当切换不同tap页面，更新icon状态
-	chrome.tabs.onSelectionChanged.addListener(function (id) {
+	/*chrome.tabs.onSelectionChanged.addListener(function (id) {
 		chrome.browserAction.setIcon({
 			path: hasInitialize.indexOf(id) === -1 ? "icon.png" : "icon-on.png"
 		});
@@ -23,11 +22,9 @@
 	chrome.tabs.onUpdated.addListener(function (id) {
 		var index = hasInitialize.indexOf(id);
 		if ( index > -1 ) {
-			hasInitialize.splice(index, 1);
-			chrome.browserAction.setIcon({
-				path: "icon.png"
-			});
+			chrome.browserAction.setIcon({path:"icon-on.png"});
+			chrome.tabs.executeScript(null, {file: "debug.js", runAt: "document_start"});
 		}
-	});
+	});*/
 
 })()
